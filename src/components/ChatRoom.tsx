@@ -4,12 +4,13 @@ import { useState, useEffect } from 'react';
 import Chat from './Chat';
 import { useSocket } from '@/hooks/useSocket';
 import ThemeToggle from './ThemeToggle';
+import ConnectedUsers from './ConnectedUsers';
 
 export default function ChatRoom() {
   const [username, setUsername] = useState('');
   const [roomId] = useState('general'); // You can make this configurable later
   
-  const { messages, isConnected, typingUsers, sendMessage, handleTyping } = useSocket(roomId, username);
+  const { messages, isConnected, typingUsers, connectedUsers, sendMessage, handleTyping } = useSocket(roomId, username);
 
   // Add welcome message when user joins
   useEffect(() => {
@@ -150,14 +151,28 @@ export default function ChatRoom() {
         </div>
 
         {/* Chat Interface */}
-        <div className="h-[500px] sm:h-[600px]">
-          <Chat
-            messages={messages}
-            onSendMessage={sendMessage}
-            onTyping={handleTyping}
-            username={username}
-            typingUsers={typingUsers}
-          />
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 sm:gap-6">
+          {/* Connected Users Sidebar */}
+          <div className="lg:col-span-1 order-2 lg:order-1">
+            <ConnectedUsers 
+              users={connectedUsers} 
+              currentUser={username} 
+              isConnected={isConnected} 
+            />
+          </div>
+          
+          {/* Chat Area */}
+          <div className="lg:col-span-3 order-1 lg:order-2">
+            <div className="h-[500px] sm:h-[600px]">
+              <Chat
+                messages={messages}
+                onSendMessage={sendMessage}
+                onTyping={handleTyping}
+                username={username}
+                typingUsers={typingUsers}
+              />
+            </div>
+          </div>
         </div>
       </div>
     </div>

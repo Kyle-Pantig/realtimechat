@@ -7,6 +7,7 @@ export const useSocket = (roomId: string, username: string) => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isConnected, setIsConnected] = useState(false);
   const [typingUsers, setTypingUsers] = useState<string[]>([]);
+  const [connectedUsers, setConnectedUsers] = useState<string[]>([]);
   const socketRef = useRef<Socket | null>(null);
   const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -20,12 +21,13 @@ export const useSocket = (roomId: string, username: string) => {
     newSocket.on('connect', () => {
       console.log('Connected to Socket.IO server');
       setIsConnected(true);
-      newSocket.emit('join-room', roomId);
+      newSocket.emit('join-room', { roomId, username });
     });
 
     newSocket.on('disconnect', () => {
       console.log('Disconnected from Socket.IO server');
       setIsConnected(false);
+      setConnectedUsers([]);
     });
 
     newSocket.on('receive-message', (message: ChatMessage) => {
@@ -37,12 +39,45 @@ export const useSocket = (roomId: string, username: string) => {
       setTypingUsers(users.filter(user => user !== username));
     });
 
+    // User management events
+    newSocket.on('user-joined', (data: { username: string; users: string[] }) => {
+      console.log(`${data.username} joined the room`);
+      setConnectedUsers(data.users);
+      
+      // Add system message
+      const systemMessage: ChatMessage = {
+        id: Date.now().toString(),
+        message: `${data.username} joined the chat`,
+        user: 'System',
+        timestamp: new Date().toISOString(),
+      };
+      setMessages((prev) => [...prev, systemMessage]);
+    });
+
+    newSocket.on('user-left', (data: { username: string; users: string[] }) => {
+      console.log(`${data.username} left the room`);
+      setConnectedUsers(data.users);
+      
+      // Add system message
+      const systemMessage: ChatMessage = {
+        id: Date.now().toString(),
+        message: `${data.username} left the chat`,
+        user: 'System',
+        timestamp: new Date().toISOString(),
+      };
+      setMessages((prev) => [...prev, systemMessage]);
+    });
+
+    newSocket.on('room-users', (users: string[]) => {
+      setConnectedUsers(users);
+    });
+
     setSocket(newSocket);
     socketRef.current = newSocket;
 
     return () => {
       if (socketRef.current) {
-        socketRef.current.emit('leave-room', roomId);
+        socketRef.current.emit('leave-room', { roomId, username });
         socketRef.current.disconnect();
       }
       if (typingTimeoutRef.current) {
@@ -103,6 +138,7 @@ export const useSocket = (roomId: string, username: string) => {
     messages,
     isConnected,
     typingUsers,
+    connectedUsers,
     sendMessage,
     handleTyping,
   };
