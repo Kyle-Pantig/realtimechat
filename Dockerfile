@@ -6,11 +6,17 @@ WORKDIR /app
 # Copy package files
 COPY package*.json ./
 
-# Install dependencies (use npm install instead of npm ci to avoid lock file issues)
-RUN npm install --production
+# Install all dependencies (including dev dependencies for build)
+RUN npm install
 
 # Copy source code
 COPY . .
+
+# Build the Next.js app
+RUN npm run build
+
+# Remove dev dependencies to reduce image size
+RUN npm prune --production
 
 # Expose port
 EXPOSE 3001
