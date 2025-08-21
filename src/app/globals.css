@@ -3,20 +3,76 @@
 @tailwind utilities;
 
 :root {
-  --foreground: #000000;
+  --foreground: #171717;
   --background: #ffffff;
+  --card: #ffffff;
+  --card-foreground: #171717;
+  --popover: #ffffff;
+  --popover-foreground: #171717;
+  --primary: #3b82f6;
+  --primary-foreground: #ffffff;
+  --secondary: #f1f5f9;
+  --secondary-foreground: #0f172a;
+  --muted: #f1f5f9;
+  --muted-foreground: #64748b;
+  --accent: #f1f5f9;
+  --accent-foreground: #0f172a;
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
+  --border: #e2e8f0;
+  --input: #ffffff;
+  --ring: #3b82f6;
+  --radius: 0.5rem;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground: #ffffff;
-    --background: #000000;
-  }
+.dark {
+  --foreground: #fafafa;
+  --background: #0a0a0a;
+  --card: #0a0a0a;
+  --card-foreground: #fafafa;
+  --popover: #0a0a0a;
+  --popover-foreground: #fafafa;
+  --primary: #3b82f6;
+  --primary-foreground: #ffffff;
+  --secondary: #1f2937;
+  --secondary-foreground: #f9fafb;
+  --muted: #1f2937;
+  --muted-foreground: #9ca3af;
+  --accent: #1f2937;
+  --accent-foreground: #f9fafb;
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
+  --border: #374151;
+  --input: #1f2937;
+  --ring: #3b82f6;
+}
+
+* {
+  border-color: var(--border);
 }
 
 body {
   color: var(--foreground);
   background: var(--background);
+  transition: color 0.3s ease, background-color 0.3s ease;
+}
+
+/* Enhanced input field styling for better visibility */
+.input-field {
+  background-color: var(--input);
+  color: var(--foreground);
+  border: 1px solid var(--border);
+  transition: all 0.2s ease;
+}
+
+.input-field:focus {
+  outline: none;
+  border-color: var(--ring);
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+}
+
+.input-field::placeholder {
+  color: var(--muted-foreground);
 }
 
 /* Custom typing animation */
@@ -45,4 +101,13 @@ body {
 
 .typing-dot:nth-child(3) {
   animation-delay: 300ms;
+}
+
+/* Dark mode toggle button */
+.theme-toggle {
+  transition: all 0.2s ease;
+}
+
+.theme-toggle:hover {
+  transform: scale(1.05);
 }

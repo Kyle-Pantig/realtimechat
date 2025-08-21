@@ -18,12 +18,12 @@ export default function TypingIndicator({ users }: TypingIndicatorProps) {
   };
 
   return (
-    <div className="flex items-center space-x-2 px-4 py-2 text-sm text-gray-500 bg-gray-100 rounded-lg mx-2 mb-2">
-      <span>{getTypingText()}</span>
-      <div className="flex space-x-1">
-        <div className="typing-dot w-2 h-2 bg-gray-500 rounded-full"></div>
-        <div className="typing-dot w-2 h-2 bg-gray-500 rounded-full"></div>
-        <div className="typing-dot w-2 h-2 bg-gray-500 rounded-full"></div>
+    <div className="flex items-center space-x-2 px-3 sm:px-4 py-2 text-xs sm:text-sm text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-800 rounded-lg mx-2 mb-2 border border-gray-200 dark:border-gray-700 transition-colors duration-300">
+      <span className="truncate">{getTypingText()}</span>
+      <div className="flex space-x-1 flex-shrink-0">
+        <div className="typing-dot w-2 h-2 bg-gray-500 dark:bg-gray-400 rounded-full"></div>
+        <div className="typing-dot w-2 h-2 bg-gray-500 dark:bg-gray-400 rounded-full"></div>
+        <div className="typing-dot w-2 h-2 bg-gray-500 dark:bg-gray-400 rounded-full"></div>
       </div>
     </div>
   );
