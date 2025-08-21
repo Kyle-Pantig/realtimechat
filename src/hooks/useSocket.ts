@@ -13,7 +13,9 @@ export const useSocket = (roomId: string, username: string) => {
   useEffect(() => {
     if (!username) return;
 
-    const newSocket = io('http://localhost:3001');
+    // Use environment variable for socket server URL, fallback to localhost for development
+    const socketUrl = process.env.NEXT_PUBLIC_SOCKET_URL || 'http://localhost:3001';
+    const newSocket = io(socketUrl);
 
     newSocket.on('connect', () => {
       console.log('Connected to Socket.IO server');
