@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  socket-server:
+    build: .
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=production
+      - PORT=3001
+      - FRONTEND_URL=http://localhost:3000
+    restart: unless-stopped
+    networks:
+      - chat-network
+
+  # Optional: Add Redis for scaling (uncomment if needed)
+  # redis:
+  #   image: redis:alpine
+  #   ports:
+  #     - "6379:6379"
+  #   networks:
+  #     - chat-network
+
+networks:
+  chat-network:
+    driver: bridge
